@@ -6,7 +6,7 @@ This repository contains the code from [A guide to MLOps](https://mlops.swiss-ai
 - ✅ **Chapter 1.1**: Run a simple ML experiment with Jupyter Notebook
 - ✅ **Chapter 1.2**: Adapt and move the Jupyter Notebook to Python scripts
 - ✅ **Chapter 1.3**: Initialize Git and DVC for local training
-- 🔄 **Chapter 1.4**: Reproduce the ML experiment with DVC
+- ✅ **Chapter 1.4**: Reproduce the ML experiment with DVC
 
 ## Chapter 1.2 - Adapt and Move the Jupyter Notebook to Python Scripts
 
@@ -105,4 +105,57 @@ git commit -m "Use DVC to version the data in my ML experiment"
 
 ### Notes
 - **Error Fixed**: Initially, `dvc add data/raw` failed because `data/` was git-ignored. Updated `.gitignore` to only ignore `data/prepared/`.
+- **Git Status**: Used `git status` (not `git stauts`) to check staged changes.
+
+## Chapter 1.4 - Reproduce the ML Experiment with DVC
+
+### DVC Pipeline
+The DVC pipeline (`dvc.yaml`) defines the following stages:
+```
++--------------+
+| data/raw.dvc |
++--------------+
+        *
+        *
+        *
+  +---------+
+  | prepare |
+  +---------+
+        *
+        *
+        *
+    +-------+
+    | train |
+    +-------+
+        *
+        *
+        *
+  +----------+
+  | evaluate |
+  +----------+
+```
+
+### Commands Executed
+```bash
+# Visualize the DVC pipeline
+dvc dag
+
+# Reproduce the entire pipeline
+dvc repro
+
+# Stage changes for Git
+git add .
+
+# Commit changes
+git commit -m "Use DVC to save the commands of my ML experiment"
+```
+
+### Key Changes
+- **DVC Pipeline**: Created `dvc.yaml` to define the pipeline stages (`prepare`, `train`, `evaluate`).
+- **DVC Lock File**: Generated `dvc.lock` to track dependencies and outputs of each stage.
+- **Git Ignore Updates**: Added `.gitignore` files for `evaluation/` and `evaluation/plots/`.
+
+### Notes
+- **Pipeline Execution**: `dvc repro` automatically runs only the necessary stages (skips `data/raw.dvc` if unchanged).
+- **Outputs**: All stages executed successfully, generating `data/prepared/`, `model/`, and `evaluation/`.
 - **Git Status**: Used `git status` (not `git stauts`) to check staged changes.

@@ -3,5 +3,11 @@
 
 # byte-compiled / optimized / dll files
 __pycache__/
+
+#macos metadata files
 .DS_Store
+
+#dvc plots
+dvc_plots
+
 /model
