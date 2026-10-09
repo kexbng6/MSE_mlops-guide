@@ -1,6 +1,7 @@
-data/prepared/
-evaluation/
-model/
+## python
 .venv/
+
+# byte-compiled / optimized / dll files
 __pycache__/
 .DS_Store
+/model

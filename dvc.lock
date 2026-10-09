@@ -1,0 +1,94 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python3.13 src/prepare.py data/raw data/prepared
+    deps:
+    - path: data/raw
+      hash: md5
+      md5: 648bf1fb9f622256f3f642e3e0927a24.dir
+      size: 9260297
+      nfiles: 1500
+    - path: src/prepare.py
+      hash: md5
+      md5: 7938f198d75283ba5b8c190144e0e42d
+      size: 2570
+    - path: src/utils/seed.py
+      hash: md5
+      md5: 92b32fc66f3138b11c0f8302c010b27b
+      size: 405
+    params:
+      params.yaml:
+        prepare:
+          seed: 5241
+          split: 0.2
+          image_size:
+          - 32
+          - 32
+          grayscale: true
+          batch_size: 32
+    outs:
+    - path: data/prepared
+      hash: md5
+      md5: 80266e0981308ea39dbc9919e86a1798.dir
+      size: 6184726
+      nfiles: 8
+  train:
+    cmd: python3.13 src/train.py data/prepared model
+    deps:
+    - path: data/prepared
+      hash: md5
+      md5: 80266e0981308ea39dbc9919e86a1798.dir
+      size: 6184726
+      nfiles: 8
+    - path: src/train.py
+      hash: md5
+      md5: b9723bac2a4855e17f8a0fbe899943f0
+      size: 2741
+    - path: src/utils/seed.py
+      hash: md5
+      md5: 92b32fc66f3138b11c0f8302c010b27b
+      size: 405
+    params:
+      params.yaml:
+        train:
+          seed: 5241
+          lr: 0.0001
+          epochs: 5
+          conv_size: 32
+          dense_size: 64
+          output_classes: 10
+    outs:
+    - path: model
+      hash: md5
+      md5: a7320be92f1dd61c550bc13c2034606f.dir
+      size: 2501135
+      nfiles: 2
+  evaluate:
+    cmd: python3.13 src/evaluate.py model data/prepared
+    deps:
+    - path: model
+      hash: md5
+      md5: a7320be92f1dd61c550bc13c2034606f.dir
+      size: 2501135
+      nfiles: 2
+    - path: src/evaluate.py
+      hash: md5
+      md5: d0f053add1abfd9e1dce39ea5748dec6
+      size: 4893
+    outs:
+    - path: evaluation/metrics.json
+      hash: md5
+      md5: 8b9d17e686d5cfae34e1aa006ab00db3
+      size: 158
+    - path: evaluation/plots/confusion_matrix.png
+      hash: md5
+      md5: 404eaa2bc5f0465a93c0a5508029a24b
+      size: 51106
+    - path: evaluation/plots/pred_preview.png
+      hash: md5
+      md5: 98c2a327ae0c5948023242d379c2fe41
+      size: 42149
+    - path: evaluation/plots/training_history.png
+      hash: md5
+      md5: 120594888010e153bfb28f128cdbe95c
+      size: 33614

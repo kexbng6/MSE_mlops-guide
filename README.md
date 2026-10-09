@@ -2,6 +2,12 @@
 
 This repository contains the code from [A guide to MLOps](https://mlops.swiss-ai-center.ch/).
 
+## Progress
+- ✅ **Chapter 1.1**: Run a simple ML experiment with Jupyter Notebook
+- ✅ **Chapter 1.2**: Adapt and move the Jupyter Notebook to Python scripts
+- ✅ **Chapter 1.3**: Initialize Git and DVC for local training
+- 🔄 **Chapter 1.4**: Reproduce the ML experiment with DVC
+
 ## Chapter 1.2 - Adapt and Move the Jupyter Notebook to Python Scripts
 
 This chapter focuses on transforming a Jupyter Notebook into modular Python scripts for better reproducibility, automation, and maintainability.
@@ -68,3 +74,35 @@ python3.13 src/evaluate.py model data/prepared
   Access it at:
   - http://localhost:8888/lab
   - Token: `a323e2042b8f09959715aa055f7f537f5f913c100483ca1c`
+
+## Chapter 1.3 - Initialize Git and DVC for Local Training
+
+### Commands Executed
+```bash
+# Freeze dependencies
+pip freeze --local --all > requirements-freeze.txt
+
+# Initialize DVC
+dvc init
+
+# Disable DVC analytics
+dvc config core.analytics false
+
+# Track raw data with DVC (after fixing .gitignore)
+dvc add data/raw
+
+# Stage changes for Git
+git add .
+
+# Commit changes
+git commit -m "Use DVC to version the data in my ML experiment"
+```
+
+### Key Changes
+- **DVC Initialization**: Created `.dvc/`, `.dvcignore`, and `data/raw.dvc`.
+- **Git Ignore Update**: Modified `.gitignore` to exclude `data/prepared/`, `evaluation/`, `model/`, and `.venv/`.
+- **DVC Tracking**: Added `data/raw` to DVC for versioning large files.
+
+### Notes
+- **Error Fixed**: Initially, `dvc add data/raw` failed because `data/` was git-ignored. Updated `.gitignore` to only ignore `data/prepared/`.
+- **Git Status**: Used `git status` (not `git stauts`) to check staged changes.
