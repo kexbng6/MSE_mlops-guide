@@ -11,3 +11,7 @@ __pycache__/
 dvc_plots
 
 /model
+
+# gcloud CLI (installed locally, not project source)
+google-cloud-sdk/
+google-cloud-cli-*.tar
