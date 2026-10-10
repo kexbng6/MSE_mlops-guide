@@ -7,6 +7,9 @@ This repository contains the code from [A guide to MLOps](https://mlops.swiss-ai
 - ✅ **Chapter 1.2**: Adapt and move the Jupyter Notebook to Python scripts
 - ✅ **Chapter 1.3**: Initialize Git and DVC for local training
 - ✅ **Chapter 1.4**: Reproduce the ML experiment with DVC
+- ✅ **Chapter 2.1**: Move the ML experiment code to the cloud
+- ✅ **Chapter 2.2**: Move the ML experiment data to the cloud
+- 🔄 **Chapter 2.3**: Reproduce the ML experiment in a CI/CD pipeline
 
 ## Chapter 1.2 - Adapt and Move the Jupyter Notebook to Python Scripts
 
@@ -159,3 +162,49 @@ git commit -m "Use DVC to save the commands of my ML experiment"
 - **Pipeline Execution**: `dvc repro` automatically runs only the necessary stages (skips `data/raw.dvc` if unchanged).
 - **Outputs**: All stages executed successfully, generating `data/prepared/`, `model/`, and `evaluation/`.
 - **Git Status**: Used `git status` (not `git stauts`) to check staged changes.
+
+## Chapter 2.1 - Move the ML Experiment Code to the Cloud
+
+### Commands Executed
+```bash
+# Clone the repository to Google Cloud Shell or a local machine with gcloud configured
+git clone https://github.com/kexbng6/MSE_mlops-guide.git
+cd MSE_mlops-guide
+
+# Set the GCP project
+gcloud config set project mlopsguide
+```
+
+### Key Changes
+- **Repository on GitHub**: Code is now versioned and available at [kexbng6/MSE_mlops-guide](https://github.com/kexbng6/MSE_mlops-guide).
+- **GCP Project**: Configured to use `mlopsguide` as the default project.
+
+### Notes
+- **Google Cloud Shell**: Used for running commands directly in the cloud environment.
+
+## Chapter 2.2 - Move the ML Experiment Data to the Cloud
+
+### Commands Executed
+```bash
+# Set up Application Default Credentials (ADC)
+gcloud auth application-default login
+
+# Install CA certificates for Python 3.13
+"/Applications/Python 3.13/Install Certificates.command"
+
+# Configure DVC remote for Google Cloud Storage
+dvc remote add -d myremote gs://bonga-bucket/dvc-storage
+
+# Push data to the remote bucket
+.venv/bin/dvc push
+```
+
+### Key Changes
+- **DVC Remote**: Configured to use Google Cloud Storage (`gs://bonga-bucket/dvc-storage`).
+- **ADC Configuration**: Application Default Credentials set up for authentication.
+- **SSL Certificates**: Installed CA certificates for Python to resolve SSL verification issues.
+- **Data Pushed**: Successfully pushed 1516 files to the remote bucket.
+
+### Notes
+- **Troubleshooting**: Resolved issues with missing ADC and SSL certificate verification by following the steps in [dvc_fix.md](dvc_fix.md).
+- **Bucket Access**: Ensured `kevin.bonga@gmail.com` has `Storage Admin` permissions on `bonga-bucket`.
