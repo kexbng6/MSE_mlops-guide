@@ -1,5 +1,7 @@
 [core]
     analytics = false
-    remote = data
+    remote = myremote
 ['remote "data"']
     url = gs://bonga-bucket/dvcstore
+['remote "myremote"']
+    url = gs://bonga-bucket/dvc-storage
